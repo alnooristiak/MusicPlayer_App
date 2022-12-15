@@ -1,4 +1,4 @@
-import { Dimensions, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Dimensions, FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { FontAwesome } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
@@ -6,20 +6,48 @@ import { Entypo } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
 
+import { AntDesign } from '@expo/vector-icons';
+import getSong from '../model/data';
+
 // Window Width
 const {width, height} = Dimensions.get("window")
 
 const MusicPlayer = () => {
+
+    const renderSongs = ({ item, index }) => {
+        return (
+            <View style={styles.displayImageContainer}>
+                <View style={styles.imgWrapper}>
+                    <Image 
+                    source={(item.artwork)} 
+                    style={styles.musicImage} />
+                </View>
+            </View>
+        )
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             {/* <Text>MusicPlayer</Text> */}
 
             {/* === Song Banner Image Section === */}
-            <View style={styles.imgWrapper}>
+            {/* <View style={styles.imgWrapper}>
                 <Image 
                 source={require('../assets/img/img1.jpg')} 
                 style={styles.musicImage} />
-            </View>
+            </View> */}
+
+            {/* Render Datas  */}
+            <FlatList 
+            data={getSong}
+            renderItem={renderSongs}
+            keyExtractor={item => item.id}
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            scrollEventThrottle={16}
+            onScroll={() => {}}
+            />
 
             {/* === Song Tittle & Artist Name Section === */}
             <View style={styles.songTexts}>
@@ -46,6 +74,19 @@ const MusicPlayer = () => {
             <View style={styles.songTimgContainer}>
                 <Text style={styles.songTimgText}>00:00</Text>
                 <Text style={styles.songTimgText}>00:00</Text>
+            </View>
+
+            {/* === Music Increase Decrease Pouse Buttons Section === */}
+            <View style={styles.musicMainBtnSec}>
+                <TouchableOpacity>
+                    <AntDesign name="stepbackward" size={30} color="black" />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                    <AntDesign name="pausecircleo" size={30} color="black" />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                    <AntDesign name="stepforward" size={30} color="black" />
+                </TouchableOpacity>
             </View>
 
             {/* === Bottom Nav Icon Section === */}
@@ -84,11 +125,17 @@ const styles = StyleSheet.create({
         backgroundColor: 'yellow',
         position: 'relative'
     },
+    displayImageContainer: {
+        width: width,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     imgWrapper: {
         flex: 1,
-        width: 300,
-        height: 340,
-        alignSelf: 'center',
+        width: 320,
+        height: 350,
+        justifyContent: 'center',
+        alignItems: 'center',
         marginTop: 50,
     },
     musicImage: {
@@ -127,6 +174,13 @@ const styles = StyleSheet.create({
     },
     songTimgText: {
         fontWeight: 'bold'
+    },
+    // Meausic Main BTN Section
+    musicMainBtnSec: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        marginTop: 15,
     },
     btnContainer: {
         position: 'absolute',
